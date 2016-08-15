@@ -105,12 +105,17 @@ public class MainActivity extends AppCompatActivity {
                 // create Intent to take a picture and return control to the calling application
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 fileUri = MediaUtil.getOutputMediaFileUri(MediaUtil.MEDIA_TYPE_IMAGE); // create a file to save the image
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri); // set the image file name
-                // cache uri
-                PreferenceManager.getDefaultSharedPreferences(MainActivity.this)
-                        .edit().putString(_TEMP_PHOTO_PATH, fileUri.getPath()).apply();
-                // start the image capture Intent
-                startActivityForResult(intent, REQ_CAPTURE_PHOTO);
+                if (fileUri != null) {
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri); // set the image file name
+                    // cache uri
+                    PreferenceManager.getDefaultSharedPreferences(MainActivity.this)
+                            .edit().putString(_TEMP_PHOTO_PATH, fileUri.getPath()).apply();
+                    // start the image capture Intent
+                    startActivityForResult(intent, REQ_CAPTURE_PHOTO);
+                }else{
+                    Snackbar.make(uiBinding.rootView, "sorry, start cam failed.", Snackbar.LENGTH_LONG).show();
+                }
+
             }
         });
 
@@ -187,22 +192,37 @@ public class MainActivity extends AppCompatActivity {
             handleCrop(resultCode, data);
             fileUri = null;
         } else if (requestCode == REQ_CAPTURE_PHOTO) {
+
             if (fileUri != null) {
-                beginCrop(fileUri);
+                File file=new File(fileUri.toString());
+                if (file.exists()) {
+                    beginCrop(fileUri);
+                }
             }
         }
     }
 
     private void beginCrop(Uri source) {
-        Uri destination = Uri.fromFile(new File(getCacheDir(), "cropped_" + UUID.randomUUID()));
-        Crop.of(source, destination).withAspect(16, 9).start(this);
+        if (source == null) {
+            Snackbar.make(uiBinding.rootView, "image not selected", Snackbar.LENGTH_SHORT).show();
+            return;
+        }
+        Uri destination = null;
+        try {
+            destination = Uri.fromFile(new File(getCacheDir(), "cropped_" + UUID.randomUUID()));
+        } catch (Exception e) {
+            Snackbar.make(uiBinding.rootView, "image crop failed", Snackbar.LENGTH_SHORT).show();
+            e.printStackTrace();
+        }
+        if (destination != null) {
+            Crop.of(source, destination).withAspect(16, 9).start(this);
+        }
     }
 
     private void handleCrop(int resultCode, Intent result) {
         if (resultCode == RESULT_OK) {
             Glide.with(this)
                     .load(Crop.getOutput(result))
-//                    .load("http://vignette2.wikia.nocookie.net/walkingdead/images/3/3f/Shut-up-and-take-my-money.jpg/revision/latest/scale-to-width-down/640?cb=20140829235648")
                     .into(uiBinding.image);
 
             uiBinding.preview.destroyDrawingCache();
@@ -283,24 +303,41 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setTypeFace() {
-        Typeface face = Typeface.createFromAsset(getAssets(),
-                "fonts/bignoodletoo.woff");
+        Typeface face = null;
+        try {
+            face = Typeface.createFromAsset(getAssets(),
+                    "fonts/bignoodletoo.woff");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-        uiBinding.titleLine.setTypeface(face);
-        uiBinding.textPotg.setTypeface(face);
-        uiBinding.textName.setTypeface(face);
-        uiBinding.textCharacter.setTypeface(face);
-        uiBinding.inputPotg.setTypeface(face);
-        uiBinding.inputName.setTypeface(face);
-        uiBinding.inputCharacter.setTypeface(face);
-        uiBinding.inputPotgLayout.setTypeface(face);
-        uiBinding.inputNameLayout.setTypeface(face);
-        uiBinding.inputCharacterLayout.setTypeface(face);
-        uiBinding.selectImage.setTypeface(face);
-        uiBinding.capturePhoto.setTypeface(face);
-        uiBinding.saveImage.setTypeface(face);
-        uiBinding.shareImage.setTypeface(face);
-        uiBinding.tips.setTypeface(face);
+        if (face == null) {
+            face = Typeface.createFromAsset(getAssets(),
+                    "bignoodletoo.ttf");
+        }
+
+        if (face != null) {
+            uiBinding.titleLine.setTypeface(face);
+            uiBinding.textPotg.setTypeface(face);
+            uiBinding.textName.setTypeface(face);
+            uiBinding.textCharacter.setTypeface(face);
+            uiBinding.inputPotg.setTypeface(face);
+            uiBinding.inputName.setTypeface(face);
+            uiBinding.inputCharacter.setTypeface(face);
+            uiBinding.inputPotgLayout.setTypeface(face);
+            uiBinding.inputNameLayout.setTypeface(face);
+            uiBinding.inputCharacterLayout.setTypeface(face);
+            uiBinding.selectImage.setTypeface(face);
+            uiBinding.capturePhoto.setTypeface(face);
+            uiBinding.saveImage.setTypeface(face);
+            uiBinding.shareImage.setTypeface(face);
+            uiBinding.tips.setTypeface(face);
+        } else {
+            uiBinding.titleLine.setTextColor(getResources().getColor(android.R.color.holo_red_light));
+            uiBinding.titleLine.setText("Sorry, font not found.");
+        }
+
+
     }
 
     @Override
@@ -314,13 +351,21 @@ public class MainActivity extends AppCompatActivity {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
 
+        adjustPreviewRatio();
+    }
+
+    private void adjustPreviewRatio() {
         uiBinding.preview.postDelayed(new Runnable() {
             @Override
             public void run() {
-                ViewGroup.LayoutParams lp = uiBinding.preview.getLayoutParams();
-                int measuredWidth = uiBinding.preview.getMeasuredWidth();
-                lp.height = measuredWidth / 16 * 9;
-                uiBinding.preview.setLayoutParams(lp);
+                try {
+                    ViewGroup.LayoutParams lp = uiBinding.preview.getLayoutParams();
+                    int measuredWidth = uiBinding.preview.getMeasuredWidth();
+                    lp.height = measuredWidth / 16 * 9;
+                    uiBinding.preview.setLayoutParams(lp);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }, 500);
     }
@@ -330,15 +375,7 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
 
         if (uiBinding.preview.getMeasuredWidth() == 0) {
-            uiBinding.preview.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    ViewGroup.LayoutParams lp = uiBinding.preview.getLayoutParams();
-                    int measuredWidth = uiBinding.preview.getMeasuredWidth();
-                    lp.height = measuredWidth / 16 * 9;
-                    uiBinding.preview.setLayoutParams(lp);
-                }
-            }, 500);
+            adjustPreviewRatio();
         }
 
 
