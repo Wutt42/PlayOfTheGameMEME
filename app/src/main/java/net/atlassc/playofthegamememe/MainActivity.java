@@ -3,6 +3,7 @@ package net.atlassc.playofthegamememe;
 import android.Manifest;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
@@ -54,10 +55,10 @@ public class MainActivity extends AppCompatActivity {
         setButtonActions();
 
         setupDragingText();
-
-        Glide.with(this)
-                .load(R.drawable.dva)
-                .into(uiBinding.image);
+//
+//        Glide.with(this)
+//                .load(R.drawable.dva)
+//                .into(uiBinding.image);
 
     }
 
@@ -307,6 +308,21 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
 
 
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        uiBinding.preview.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                ViewGroup.LayoutParams lp = uiBinding.preview.getLayoutParams();
+                int measuredWidth = uiBinding.preview.getMeasuredWidth();
+                lp.height = measuredWidth / 16 * 9;
+                uiBinding.preview.setLayoutParams(lp);
+            }
+        }, 500);
     }
 
     @Override
