@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
                             .edit().putString(_TEMP_PHOTO_PATH, fileUri.getPath()).apply();
                     // start the image capture Intent
                     startActivityForResult(intent, REQ_CAPTURE_PHOTO);
-                }else{
+                } else {
                     Snackbar.make(uiBinding.rootView, "sorry, start cam failed.", Snackbar.LENGTH_LONG).show();
                 }
 
@@ -193,12 +193,7 @@ public class MainActivity extends AppCompatActivity {
             fileUri = null;
         } else if (requestCode == REQ_CAPTURE_PHOTO) {
 
-            if (fileUri != null) {
-                File file=new File(fileUri.toString());
-                if (file.exists()) {
-                    beginCrop(fileUri);
-                }
-            }
+            beginCrop(fileUri);
         }
     }
 
