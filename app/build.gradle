@@ -12,8 +12,8 @@ android {
         applicationId "net.atlassc.playofthegamememe"
         minSdkVersion 16
         targetSdkVersion 24
-        versionCode 5
-        versionName "1.0.2"
+        versionCode 7
+        versionName "1.0.4"
     }
     buildTypes {
         release {
