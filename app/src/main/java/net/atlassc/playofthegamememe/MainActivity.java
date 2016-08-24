@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
 
         setButtonActions();
 
-        setupDragingText();
+        setupDraggingText();
 //
 //        Glide.with(this)
 //                .load(R.drawable.dva)
@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void setupDragingText() {
+    private void setupDraggingText() {
         uiBinding.textGroup
                 .setOnTouchListener(new View.OnTouchListener() {
                     private float lastY;
@@ -102,6 +102,8 @@ public class MainActivity extends AppCompatActivity {
         uiBinding.capturePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+
                 // create Intent to take a picture and return control to the calling application
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 fileUri = MediaUtil.getOutputMediaFileUri(MediaUtil.MEDIA_TYPE_IMAGE); // create a file to save the image
@@ -124,6 +126,8 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 try {
+
+                    uiBinding.preview.destroyDrawingCache();
 
                     Bitmap bitmap = uiBinding.preview.getDrawingCache();
                     String filePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) +
@@ -156,6 +160,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 try {
+                    uiBinding.preview.destroyDrawingCache();
 
                     Bitmap bitmap = uiBinding.preview.getDrawingCache();
                     String filePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) +
