@@ -13,6 +13,7 @@ import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.Html;
@@ -30,14 +31,18 @@ import net.atlassc.playofthegamememe.databinding.ActivityMainBinding;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String[] PERMISSION = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
     private static final int REQ_CAPTURE_PHOTO = 1118;
+    private static final int REQ_CAPTURE_PHOTO_BACKUP = 1119;
     private ActivityMainBinding uiBinding;
-    private Uri fileUri;
+    private Uri photoUri;
 
     private static final String _TEMP_PHOTO_PATH = "temp_photo_path";
 
@@ -92,6 +97,53 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
+
+    public File createImageFile() throws IOException {
+
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        String storageDirPath = getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath();
+        File storageDir = new File(storageDirPath);
+        if (!storageDir.exists()) {
+            storageDir.mkdirs();
+        }
+
+        File image = File.createTempFile(imageFileName, ".jpg", storageDir);
+        return image;
+    }
+
+    public void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+
+            } catch (IOException e) {
+                showPictureTakingFailed();
+                e.printStackTrace();
+            }
+
+            if (photoFile != null) {
+                try {
+                    photoUri = FileProvider.getUriForFile(this, "net.atlassc.playofthegamememe.fileprovider", photoFile);
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
+                    startActivityForResult(takePictureIntent, REQ_CAPTURE_PHOTO);
+                } catch (Exception e) {
+                    showPictureTakingFailed();
+                    e.printStackTrace();
+                }
+            }
+        } else {
+            showPictureTakingFailed();
+        }
+
+    }
+
+    public void showPictureTakingFailed() {
+        Snackbar.make(uiBinding.rootView, "sorry, start camera failed with storage access problem.", Snackbar.LENGTH_LONG).show();
+    }
+
     private void setButtonActions() {
         uiBinding.selectImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,22 +154,7 @@ public class MainActivity extends AppCompatActivity {
         uiBinding.capturePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
-                // create Intent to take a picture and return control to the calling application
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                fileUri = MediaUtil.getOutputMediaFileUri(MediaUtil.MEDIA_TYPE_IMAGE); // create a file to save the image
-                if (fileUri != null) {
-                    intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri); // set the image file name
-                    // cache uri
-                    PreferenceManager.getDefaultSharedPreferences(MainActivity.this)
-                            .edit().putString(_TEMP_PHOTO_PATH, fileUri.getPath()).apply();
-                    // start the image capture Intent
-                    startActivityForResult(intent, REQ_CAPTURE_PHOTO);
-                } else {
-                    Snackbar.make(uiBinding.rootView, "sorry, start cam failed.", Snackbar.LENGTH_LONG).show();
-                }
-
+             dispatchTakePictureIntent();
             }
         });
 
@@ -187,6 +224,19 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void capturePhotoBackup() {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        try {
+            startActivityForResult(intent, REQ_CAPTURE_PHOTO_BACKUP);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Snackbar.make(uiBinding.rootView, "sorry, start camera failed.", Snackbar.LENGTH_LONG).show();
+        }
+
+
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -195,10 +245,11 @@ public class MainActivity extends AppCompatActivity {
             beginCrop(data.getData());
         } else if (requestCode == Crop.REQUEST_CROP) {
             handleCrop(resultCode, data);
-            fileUri = null;
+            photoUri = null;
         } else if (requestCode == REQ_CAPTURE_PHOTO) {
-
-            beginCrop(fileUri);
+            beginCrop(photoUri);
+        } else if (requestCode == REQ_CAPTURE_PHOTO_BACKUP) {
+            LogUtil.i("nougat");
         }
     }
 
