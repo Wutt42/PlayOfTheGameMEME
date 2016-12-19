@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">我的全场最佳</string>
+    <string name="btn_capture">拍照</string>
+    <string name="btn_save">保存</string>
+    <string name="btn_select">选取</string>
+    <string name="btn_share">分享</string>
+    <string name="deny">拒绝</string>
+    <string name="font_not_found">字体未找到</string>
+    <string name="go_to_settings">转到设置</string>
+    <string name="image_cache_creating_failed">图片缓存失败，请检查存储器权限设置。</string>
+    <string name="image_cropping_failed">图片裁剪失败。</string>
+    <string name="image_not_selected">未选择任何图片</string>
+    <string name="image_saved_to_gallery_at">图片保存于：</string>
+    <string name="image_saving_failed">图片保存失败，请检查存储器权限设置。</string>
+    <string name="make_your_own_potg">你就是全场最佳</string>
+    <string name="permission_checker_title">检查权限</string>
+    <string name="potg">全场最佳</string>
+    <string name="share_image">分享图片</string>
+    <string name="show_tips">说明</string>
+    <string name="start_camera_failed">开启相机失败</string>
+    <string name="start_camera_failed_check_for_permission">开启相机失败，请检查存储器权限。</string>
+    <string name="string_help_text">这个app需要一些权限。</string>
+    <string name="ui_potg">"全场最佳       "</string>
+    <string name="ui_your_character">\"你的英雄       \"</string>
+    <string name="ui_your_name">"你的名字       "</string>
+    <string name="your_character">"扮演你的角色"</string>
+    <string name="your_name">"你的名字"</string>
+    <string name="hint_potg">全场最佳</string>
+    <string name="hint_your_character">你的英雄</string>
+    <string name="hint_your_name">你的名字</string>
+    <string name="dialog_tips">"\n
+        1. choose a image or capture a photo.\n
+        2. fill your name and character.\n
+        3. drag to move the texts.\n
+        4. save or share your POTG!   🎉\n
+        @ShinChven if you liked it."</string></resources>

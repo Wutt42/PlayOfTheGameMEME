@@ -31,5 +31,8 @@
         4. save or share your POTG!   🎉\n
         @ShinChven if you liked it."</string>
     <string name="show_tips">show tips</string>
+    <string name="hint_potg">"PLAY OF THE GAME    "</string>
+    <string name="hint_your_name">"YOUR NAME    "</string>
+    <string name="hint_your_character">"YOUR CHARACTER    "</string>
 
 </resources>

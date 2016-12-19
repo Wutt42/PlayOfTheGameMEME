@@ -100,7 +100,7 @@
                     android:id="@+id/input_potg"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="PLAY OF THE GAME "
+                    android:hint="@string/hint_potg"
                     android:imeOptions="actionNext"
                     android:inputType="text"
                     android:maxLines="1" />
@@ -115,7 +115,7 @@
                     android:id="@+id/input_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="YOUR NAME"
+                    android:hint="@string/hint_your_name"
                     android:imeOptions="actionNext"
                     android:inputType="text"
                     android:maxLines="1" />
@@ -130,7 +130,7 @@
                     android:id="@+id/input_character"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="YOUR CHARACTER"
+                    android:hint="@string/hint_your_character"
                     android:imeOptions="actionDone"
                     android:inputType="text"
                     android:maxLines="1" />
