@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:singleLine="true"
-            android:text="MAKING YOUR OWN PLAY OF THE GAME"
+            android:text="@string/make_your_own_potg"
             android:textSize="20dp" />
 
         <RelativeLayout
@@ -52,7 +52,7 @@
                     android:layout_height="wrap_content"
                     android:clickable="false"
                     android:maxLines="1"
-                    android:text="PLAY OF THE GAME  "
+                    android:text="@string/ui_potg"
                     android:textColor="#fff"
                     android:textSize="20sp"
                     android:textStyle="italic" />
@@ -64,7 +64,7 @@
                     android:layout_marginLeft="15dp"
                     android:clickable="false"
                     android:maxLines="1"
-                    android:text="YOUR NAME  "
+                    android:text="@string/ui_your_name"
                     android:textColor="#FFE129"
                     android:textSize="30sp"
                     android:textStyle="italic" />
@@ -76,7 +76,7 @@
                     android:layout_marginLeft="30dp"
                     android:clickable="false"
                     android:maxLines="1"
-                    android:text="AS YOUR CHARACTER  "
+                    android:text="@string/ui_your_character"
                     android:textColor="#fff"
                     android:textSize="16sp"
                     android:textStyle="italic" />
@@ -151,50 +151,42 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="select" />
+                android:text="@string/btn_select" />
 
             <Button
                 android:id="@+id/capture_photo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="capture" />
+                android:text="@string/btn_capture" />
 
             <Button
                 android:id="@+id/save_image"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="save" />
+                android:text="@string/btn_save" />
 
             <Button
                 android:id="@+id/share_image"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="share" />
+                android:text="@string/btn_share" />
         </LinearLayout>
-
-        <ScrollView
+        <LinearLayout
+            android:layout_below="@+id/buttons"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/buttons">
-
-
-            <TextView
-                android:id="@+id/tips"
+            android:layout_height="wrap_content">
+            <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/buttons"
-                android:layout_marginLeft="5dp"
-                android:text="tips:\n
-            1. choose a image or capture a photo.\n
-            2. fill your name and character.\n
-            3. drag to move the texts.\n
-            4. save or share your POTG!\n
-            @ShinChven
-            " />
-        </ScrollView>
+                android:id="@+id/tips"
+                android:text="@string/show_tips"
+                />
+        </LinearLayout>
+
+
     </RelativeLayout>
 
 </layout>

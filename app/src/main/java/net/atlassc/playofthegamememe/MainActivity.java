@@ -10,10 +10,10 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.FileProvider;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.Html;
@@ -28,6 +28,7 @@ import com.bumptech.glide.Glide;
 import com.soundcloud.android.crop.Crop;
 
 import net.atlassc.playofthegamememe.databinding.ActivityMainBinding;
+import net.atlassc.playofthegamememe.databinding.DialogTipsBinding;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -41,10 +42,9 @@ public class MainActivity extends AppCompatActivity {
     private static final String[] PERMISSION = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
     private static final int REQ_CAPTURE_PHOTO = 1118;
     private static final int REQ_CAPTURE_PHOTO_BACKUP = 1119;
+    private static final String _TEMP_PHOTO_PATH = "temp_photo_path";
     private ActivityMainBinding uiBinding;
     private Uri photoUri;
-
-    private static final String _TEMP_PHOTO_PATH = "temp_photo_path";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void showPictureTakingFailed() {
-        Snackbar.make(uiBinding.rootView, "sorry, start camera failed with storage access problem.", Snackbar.LENGTH_LONG).show();
+        Snackbar.make(uiBinding.rootView, getResources().getString(R.string.start_camera_failed_check_for_permission), Snackbar.LENGTH_LONG).show();
     }
 
     private void setButtonActions() {
@@ -154,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
         uiBinding.capturePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-             dispatchTakePictureIntent();
+                dispatchTakePictureIntent();
             }
         });
 
@@ -185,10 +185,10 @@ public class MainActivity extends AppCompatActivity {
 
                     MainActivity.this.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
 
-                    Snackbar.make(uiBinding.rootView, "image saved to gallery @ " + filePath, Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(uiBinding.rootView, getResources().getString(R.string.image_saved_to_gallery_at) + filePath, Snackbar.LENGTH_LONG).show();
                 } catch (Exception e) {
                     e.printStackTrace();
-                    Snackbar.make(uiBinding.rootView, "image saving failed, please check storage permissions.", Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(uiBinding.rootView, getResources().getString(R.string.image_saving_failed), Snackbar.LENGTH_LONG).show();
                 }
             }
         });
@@ -213,13 +213,50 @@ public class MainActivity extends AppCompatActivity {
                     Intent intent = new Intent(Intent.ACTION_SEND);
                     intent.setType("image/jpeg");
                     intent.putExtra(Intent.EXTRA_STREAM, uri);
-                    startActivity(Intent.createChooser(intent, "Share Image"));
+                    startActivity(Intent.createChooser(intent, getResources().getString(R.string.share_image)));
 
-                    Snackbar.make(uiBinding.rootView, "image saved to gallery @ " + filePath, Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(uiBinding.rootView, getResources().getString(R.string.image_saved_to_gallery_at) + filePath, Snackbar.LENGTH_LONG).show();
                 } catch (Exception e) {
                     e.printStackTrace();
-                    Snackbar.make(uiBinding.rootView, "image cache creating failed, please check storage permissions.", Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(uiBinding.rootView, getResources().getString(R.string.image_cache_creating_failed), Snackbar.LENGTH_LONG).show();
                 }
+            }
+        });
+
+        uiBinding.tips.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(MainActivity.this);
+                dialogBuilder.setTitle("TIPS");
+                View tipsView = getLayoutInflater().inflate(R.layout.dialog_tips, null);
+                dialogBuilder.setView(tipsView);
+                dialogBuilder.setPositiveButton("OK", null);
+
+                Typeface face = null;
+                try {
+                    face = Typeface.createFromAsset(getAssets(),
+                            "fonts/bignoodletoo.woff");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                if (face == null) {
+                    face = Typeface.createFromAsset(getAssets(),
+                            "bignoodletoo.ttf");
+                }
+
+                if (face != null) {
+                    DialogTipsBinding bind =
+                            DataBindingUtil.bind(tipsView);
+                    try {
+                        bind.tips.setTypeface(face);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                dialogBuilder.show();
             }
         });
     }
@@ -231,7 +268,7 @@ public class MainActivity extends AppCompatActivity {
             startActivityForResult(intent, REQ_CAPTURE_PHOTO_BACKUP);
         } catch (Exception e) {
             e.printStackTrace();
-            Snackbar.make(uiBinding.rootView, "sorry, start camera failed.", Snackbar.LENGTH_LONG).show();
+            Snackbar.make(uiBinding.rootView, getResources().getString(R.string.start_camera_failed), Snackbar.LENGTH_LONG).show();
         }
 
 
@@ -255,14 +292,14 @@ public class MainActivity extends AppCompatActivity {
 
     private void beginCrop(Uri source) {
         if (source == null) {
-            Snackbar.make(uiBinding.rootView, "image not selected", Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(uiBinding.rootView, getResources().getString(R.string.image_not_selected), Snackbar.LENGTH_SHORT).show();
             return;
         }
         Uri destination = null;
         try {
             destination = Uri.fromFile(new File(getCacheDir(), "cropped_" + UUID.randomUUID()));
         } catch (Exception e) {
-            Snackbar.make(uiBinding.rootView, "image crop failed", Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(uiBinding.rootView, getResources().getString(R.string.image_cropping_failed), Snackbar.LENGTH_SHORT).show();
             e.printStackTrace();
         }
         if (destination != null) {
@@ -293,9 +330,9 @@ public class MainActivity extends AppCompatActivity {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                 if (charSequence == null || charSequence.length() == 0 || charSequence.equals("")) {
-                    charSequence = "PLAY OF THE GAME   ";
+                    charSequence = getResources().getString(R.string.ui_potg);
                 }
-                String text = charSequence.toString().toUpperCase() + "  ";
+                String text = charSequence.toString().toUpperCase() + "   ";
                 Spanned spanned = Html.fromHtml(text);
                 uiBinding.textPotg.setText(spanned);
 
@@ -317,9 +354,9 @@ public class MainActivity extends AppCompatActivity {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                 if (charSequence == null || charSequence.length() == 0 || charSequence.equals("")) {
-                    charSequence = "nobody";
+                    charSequence = getResources().getString(R.string.ui_your_name);
                 }
-                String text = charSequence.toString().toUpperCase() + "  ";
+                String text = charSequence.toString().toUpperCase() + "   ";
                 Spanned spanned = Html.fromHtml(text);
                 uiBinding.textName.setText(spanned);
 
@@ -340,9 +377,11 @@ public class MainActivity extends AppCompatActivity {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                 if (charSequence == null || charSequence.length() == 0 || charSequence.equals("")) {
-                    charSequence = "no one";
+                    charSequence = getResources().getString(R.string.ui_your_character);
+                    uiBinding.textCharacter.setText(charSequence.toString().toUpperCase() + "   ");
+                } else {
+                    uiBinding.textCharacter.setText("AS " + charSequence.toString().toUpperCase() + "   ");
                 }
-                uiBinding.textCharacter.setText("AS " + charSequence.toString().toUpperCase() + "  ");
 
             }
 
@@ -385,7 +424,7 @@ public class MainActivity extends AppCompatActivity {
             uiBinding.tips.setTypeface(face);
         } else {
             uiBinding.titleLine.setTextColor(getResources().getColor(android.R.color.holo_red_light));
-            uiBinding.titleLine.setText("Sorry, font not found.");
+            uiBinding.titleLine.setText(R.string.font_not_found);
         }
 
 
