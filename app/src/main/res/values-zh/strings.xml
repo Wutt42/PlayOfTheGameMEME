@@ -22,7 +22,7 @@
     <string name="start_camera_failed_check_for_permission">开启相机失败，请检查存储器权限。</string>
     <string name="string_help_text">这个app需要一些权限。</string>
     <string name="ui_potg">"全场最佳       "</string>
-    <string name="ui_your_character">\"你的英雄       \"</string>
+    <string name="ui_your_character">"你的英雄       "</string>
     <string name="ui_your_name">"你的名字       "</string>
     <string name="your_character">"扮演你的角色"</string>
     <string name="your_name">"你的名字"</string>
