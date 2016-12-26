@@ -1,38 +1,38 @@
 <resources>
     <string name="app_name">POTG Meme</string>
-    <string name="permission_checker_title">check the permission</string>
-    <string name="string_help_text">this app need some more permissions.</string>
-    <string name="deny">deny</string>
-    <string name="go_to_settings">go to settings</string>
-    <string name="make_your_own_potg">MAKING YOUR OWN PLAY OF THE GAME</string>
-    <string name="ui_potg">"PLAY OF THE GAME        "</string>
-    <string name="ui_your_name">"YOUR NAME     "</string>
-    <string name="ui_your_character">"AS YOUR CHARACTER      "</string>
-    <string name="potg">PLAY OF THE GAME</string>
-    <string name="your_name">YOUR NAME</string>
-    <string name="your_character">AS YOUR CHARACTER</string>
-    <string name="image_saved_to_gallery_at">"image saved to gallery @ "</string>
-    <string name="share_image">Share image</string>
-    <string name="image_saving_failed">image saving failed, please check storage permissions.</string>
-    <string name="image_cache_creating_failed">image cache creating failed, please check storage permissions.</string>
-    <string name="start_camera_failed">sorry, start camera failed.</string>
-    <string name="start_camera_failed_check_for_permission">sorry, start camera failed with storage access problem.</string>
-    <string name="font_not_found">Sorry, font not found.</string>
-    <string name="image_not_selected">image not selected</string>
-    <string name="image_cropping_failed">image cropping failed</string>
-    <string name="btn_select">select</string>
-    <string name="btn_capture">capture</string>
-    <string name="btn_save">save</string>
-    <string name="btn_share">share</string>
+    <string name="permission_checker_title">verifique as permissões</string>
+    <string name="string_help_text">esse aplicativo precisa de algumas permissões.</string>
+    <string name="deny">negado</string>
+    <string name="go_to_settings">vá para configurações</string>
+    <string name="make_your_own_potg">FAÇA SUA PRÓPRIA JOGADA DA PARTIDA</string>
+    <string name="ui_potg">"JOGADA DA PARTIDA        "</string>
+    <string name="ui_your_name">"SEU NOME     "</string>
+    <string name="ui_your_character">"COMO SEU PERSONAGEM      "</string>
+    <string name="potg">JOGADA DA PARTIDA</string>
+    <string name="your_name">SEU NOME</string>
+    <string name="your_character">COMO SEU PERSONAGEM</string>
+    <string name="image_saved_to_gallery_at">"imagem salva na galeria @ "</string>
+    <string name="share_image">Compartilhar imagem</string>
+    <string name="image_saving_failed">falha ao salvar imagem, por favor verifique as permissões de armazenamento.</string>
+    <string name="image_cache_creating_failed">criação da imagem de cache falhou, porfavor verifique as permissões de armazenamento.</string>
+    <string name="start_camera_failed">desculpe, inicialização da câmera falhou.</string>
+    <string name="start_camera_failed_check_for_permission">desculpe,  inicialização da câmera falhou com problema de acesso ao armazenamento.</string>
+    <string name="font_not_found">Desculpe, fonte não encontrada.</string>
+    <string name="image_not_selected">imagem não selecionada</string>
+    <string name="image_cropping_failed">recorte de imagem falhou</string>
+    <string name="btn_select">selecionar</string>
+    <string name="btn_capture">capturar</string>
+    <string name="btn_save">salvar</string>
+    <string name="btn_share">compartilhar</string>
     <string name="dialog_tips">"\n
-        1. choose a image or capture a photo.\n
-        2. fill your name and character.\n
-        3. drag to move the texts.\n
-        4. save or share your POTG!   🎉\n
-        @ShinChven if you liked it."</string>
-    <string name="show_tips">show tips</string>
-    <string name="hint_potg">"PLAY OF THE GAME    "</string>
-    <string name="hint_your_name">"YOUR NAME    "</string>
-    <string name="hint_your_character">"YOUR CHARACTER    "</string>
+        1. escolha uma imagem ou tire uma foto.\n
+        2. coloque seu nome e o nome do personagem.\n
+        3. arraste para mover os textos.\n
+        4. salve ou compartilhe sua POTG!   🎉\n
+        @ShinChven se você gostou."</string>
+    <string name="show_tips">mostrar dicas</string>
+    <string name="hint_potg">"JOGADA DA PARTIDA    "</string>
+    <string name="hint_your_name">"SEU NOME    "</string>
+    <string name="hint_your_character">"SEU PERSONAGEM    "</string>
 
 </resources>
